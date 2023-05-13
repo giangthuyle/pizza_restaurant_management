@@ -22,33 +22,21 @@ class PaymentServer(Flask):
 app = PaymentServer(__name__)
 
 
-@app.route('/callback/payment/success')
+@app.get('/callback/payment/success')
 def payment_success_callback():
     app.message_queue.send((Event(name='card_payment_success'),))
     return "Payment success!"
 
 
-@app.route('/callback/payment/failed')
+@app.get('/callback/payment/failed')
 def payment_failed_callback():
     app.message_queue.send((Event(name='card_payment_failed'),))
     return "Payment failed!"
 
 
-# def stop_signal_listener(connection: Connection):
-#     while True:
-#         if connection.poll():
-#             stop_signal = connection.recv()
-#             if stop_signal == 'CLOSE':
-#                 app.shutd
-#
-
-
 def start_payment_server(connection: Pipe):
     app.set_message_queue(connection)
-    # thr = Thread(target=stop_signal_listener, args=(connection,))
-    # thr.start()
     app.run(port=5000)
-    # thr.join(timeout=1)
 
 
 def start_payment_server_on_different_process():
