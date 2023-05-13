@@ -13,7 +13,7 @@ class OrderItem:
                 'currency': 'aud',
                 'product_data': {
                     'name': self._item_name,
-                    'images': ['https://i.imgur.com/EHyR2nP.png'],
+
                 },
                 'unit_amount': self._item_price,
             },

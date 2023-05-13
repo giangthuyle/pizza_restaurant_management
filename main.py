@@ -18,7 +18,7 @@ def event_distribute(signal):
 
 
 if __name__ == '__main__':
-    app = MainView(title='Hello Kitty')
+    app = MainView(title='Yummy Pizza Restaurant')
 
     payment_webserver_process, signal = start_payment_server_on_different_process()
     event_distribute_thread = Thread(target=event_distribute, args=(signal,))

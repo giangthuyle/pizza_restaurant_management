@@ -13,7 +13,7 @@ class MainView(tk.Tk):
 
         self.geometry(size)
 
-        self._total_cost = random.Random().randint(200, 1000)
+        self._total_cost = 55
         self.total_pay = tk.Label(text=f'Total: ${self._total_cost}')
         self.total_pay.pack()
 

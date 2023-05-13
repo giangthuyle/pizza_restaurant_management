@@ -7,7 +7,7 @@ from payment.strategy.card_strategy import CardPaymentStrategy
 
 class PaymentSelectView(tk.Toplevel):
 
-    def __init__(self, parent, cost: int, title='Payment Method', size='500x500+300+300'):
+    def __init__(self, parent, cost: int, title='Making Online Payment', size='500x500+300+300'):
         super().__init__(parent)
         self._payment_strategy = None
         self.title(title)
@@ -25,8 +25,8 @@ class PaymentSelectView(tk.Toplevel):
         self._payment_strategy = CardPaymentStrategy()
         mocked_order = Order(
             items=[
-                OrderItem(item_name='Pizza', item_quantity=1, item_price=2000),
-                OrderItem(item_name='Spagetti', item_quantity=1, item_price=1000),
+                OrderItem(item_name='Pizza', item_quantity=2, item_price=2000),
+                OrderItem(item_name='Spagetti', item_quantity=1, item_price=1500),
             ]
         )
         self._payment_strategy.process_payment(mocked_order)
