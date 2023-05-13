@@ -1,9 +1,8 @@
-from order.order import Order
 from payment.discount import Discount
 
 
 class PaymentStrategy:
-    def process_payment(self, order: Order, on_success, on_failure):
+    def process_payment(self):
         pass
 
     def with_discounts(self, discounts: [Discount]):
@@ -14,5 +13,10 @@ class CashPaymentStrategy(PaymentStrategy):
     def __init__(self):
         super().__init__()
 
-    def process_payment(self, order: Order, on_success, on_failure):
+    def process_payment(self):
         print("PROCESSED")
+
+
+class CardPaymentStrategy(PaymentStrategy):
+    def __init__(self):
+        super().__init__()
