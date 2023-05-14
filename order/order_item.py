@@ -4,10 +4,10 @@ class OrderItem:
         self._item_price = item_price
         self._item_quantity = item_quantity
 
-    def get_total_cost(self):
+    def get_total_item_cost(self):  # cost cua tung item
         return self._item_price * self._item_quantity
 
-    def to_line_item(self):
+    def to_stripe_format(self):  # show info cua tung item)
         return {
             'price_data': {
                 'currency': 'aud',

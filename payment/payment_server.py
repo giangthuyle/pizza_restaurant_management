@@ -1,4 +1,5 @@
 from multiprocessing import Process, Pipe
+from multiprocessing.connection import Connection
 
 from flask import Flask
 
@@ -6,43 +7,43 @@ from utils.event import Event
 
 
 class PaymentServer(Flask):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.message_queue = None
+    def __init__(self):
+        super().__init__(__name__)
+        self.signal_sender = None
 
-    def set_message_queue(self, message_queue: Pipe):
-        self.message_queue = message_queue
+    def set_signal_sender(self, signal_sender: Connection):
+        self.signal_sender = signal_sender
 
-    def run(self, *args, **kwargs):
+    def run_server(self, port: int):
         print("Starting payment server")
-        super().run(*args, **kwargs)
+        super().run(port=port)
         print("Payment server stopped")
 
 
-app = PaymentServer(__name__)
+app = PaymentServer()  # yeu cau de chay Flask
 
 
-@app.get('/callback/payment/success')
+@app.get('/callback/payment/success')  # neu duoc browser goi payment success
 def payment_success_callback():
-    app.message_queue.send((Event(name='card_payment_success'),))
+    app.signal_sender.send((Event(name='card_payment_success'),))  # tu webserver gui signal den GUI
     return "Payment success!"
 
 
 @app.get('/callback/payment/failed')
 def payment_failed_callback():
-    app.message_queue.send((Event(name='card_payment_failed'),))
+    app.signal_sender.send((Event(name='card_payment_failed'),))
     return "Payment failed!"
 
 
-def start_payment_server(connection: Pipe):
-    app.set_message_queue(connection)
-    app.run(port=5000)
+def start_payment_server(signal_sender: Connection):  # ham de run server va gan pipe
+    app.set_signal_sender(signal_sender)
+    app.run_server(port=5000)
 
 
-def start_payment_server_on_different_process():
-    main_connection, sub_connection = Pipe()
+def start_payment_server_on_different_process():  # ham de chay process webserver
+    signal, signal_sender = Pipe()  # tao pipe
     # Create new process for web server
-    proc = Process(name='WebserverProcess', target=start_payment_server, args=(sub_connection,))
+    web_server_process = Process(name='WebserverProcess', target=start_payment_server, args=(signal_sender,))
 
-    proc.start()
-    return proc, main_connection
+    web_server_process.start()
+    return web_server_process, signal

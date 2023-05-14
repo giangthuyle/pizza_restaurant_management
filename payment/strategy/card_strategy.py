@@ -1,20 +1,20 @@
-from order.order import Order
-from payment.payment_server import app
-from payment.strategy.payment_strategy import PaymentStrategy
-import stripe
 import webbrowser
 
+import stripe
+
+from order.order import Order
+from payment.strategy.payment_strategy import PaymentStrategy
 from utils.event_manager import EventManager
 
 
 class CardPaymentStrategy(PaymentStrategy):
     def __init__(self):
-        super().__init__()
+        super().__init__()  # class nay ke thua class paymentstrategy
         self._api_key = 'sk_test_4eC39HqLyjWDarjtT1zdp7dc'
 
     def process_payment(self, order: Order, on_success=None, on_failure=None):
         stripe.api_key = self._api_key
-        # Generate a payment link
+        # Generate a payment link #checkout, session, create thuoc thu vien stripe
         session = stripe.checkout.Session.create(
             payment_method_types=['card'],
             line_items=order.to_line_items(),
