@@ -20,12 +20,12 @@ class PaymentServer(Flask):
         print("Payment server stopped")
 
 
-app = PaymentServer()  # yeu cau de chay Flask
+app = PaymentServer()
 
 
-@app.get('/callback/payment/success')  # neu duoc browser goi payment success
+@app.get('/callback/payment/success')
 def payment_success_callback():
-    app.signal_sender.send((Event(name='card_payment_success'),))  # tu webserver gui signal den GUI
+    app.signal_sender.send((Event(name='card_payment_success'),))  #webserver send signal to GUI
     return "Payment success!"
 
 
@@ -35,13 +35,13 @@ def payment_failed_callback():
     return "Payment failed!"
 
 
-def start_payment_server(signal_sender: Connection):  # ham de run server va gan pipe
+def start_payment_server(signal_sender: Connection):
     app.set_signal_sender(signal_sender)
     app.run_server(port=5000)
 
 
-def start_payment_server_on_different_process():  # ham de chay process webserver
-    signal, signal_sender = Pipe()  # tao pipe
+def start_payment_server_on_different_process():  # run process webserver
+    signal, signal_sender = Pipe()  #create pipe
     # Create new process for web server
     web_server_process = Process(name='WebserverProcess', target=start_payment_server, args=(signal_sender,))
 

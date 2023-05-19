@@ -23,26 +23,25 @@ class MainView(tk.Tk):
 
         self.register_callbacks()
 
-    def handle_success_callback(self):  # la 1 method (function cua class nay), de goi attributes trong class
+    def handle_success_callback(self):
         self.total_pay.configure(text='Payment Success')
-        self.confirm_order_btn.pack_forget()  # an nut confirm order di
+        self.confirm_order_btn.pack_forget()
 
     def handle_failed_callback(self):
         self.total_pay.configure(text='Payment Failed')
         self.confirm_order_btn.pack_forget()
-        self.reset_btn.pack()  # hien nut reset
+        self.reset_btn.pack()
 
-    def register_callbacks(self):  # neu event manager tra ve success hay fail thi hien text
+    def register_callbacks(self):
         EventManager().subscribe('card_payment_success', self.handle_success_callback)
         EventManager().subscribe('card_payment_failed', self.handle_failed_callback)
 
-    # khi subscribe nhan event success/fail thi goi function self. handle_success/fail_callback
-    def on_confirm_order(self):  # khi an confirm order thi show ra man hinh paymentselect
+    def on_confirm_order(self):
         payment_select = PaymentSelectView(parent=self)
-        payment_select.grab_set()  # dung grab set vi la window
+        payment_select.grab_set()
 
     def on_reset_click(self):
         self.total_pay.configure(
-            text=f'Total: ${self._total_cost}')  # configure de show lai total cost sau khi da an di o tren)
+            text=f'Total: ${self._total_cost}')
         self.confirm_order_btn.pack()
-        self.reset_btn.pack_forget()  # an nut reset
+        self.reset_btn.pack_forget()
